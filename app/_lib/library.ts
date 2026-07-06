@@ -11,6 +11,7 @@ export type Book = {
   status: string;
   color: string;
   panel: string;
+  coverImage: string;
   description: string;
   tags: string[];
 };
@@ -27,6 +28,9 @@ export type Shelf = {
   href: string;
   books: Book[];
 };
+
+const openLibraryCover = (isbn: string) =>
+  `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false`;
 
 export const navItems = [
   { href: "/dashboard", label: "Dashboard" },
@@ -49,6 +53,7 @@ export const featuredBook: Book = {
   status: "Nổi bật tuần này",
   color: "#f3c96d",
   panel: "#2d3142",
+  coverImage: openLibraryCover("9780525559474"),
   description:
     "Một cuốn sách nhẹ nhưng không mỏng, đi qua mất mát, chữa lành và cách con người học lại việc tin vào những ngày bình thường.",
   tags: ["Chữa lành", "Đời sống", "Tâm lý"],
@@ -69,6 +74,7 @@ export const books: Book[] = [
     status: "Mới cập nhật",
     color: "#7b8fb5",
     panel: "#1f2737",
+    coverImage: openLibraryCover("9781569319017"),
     description:
       "Một họa sĩ trẻ bước vào thành phố chỉ tồn tại trong bản thảo, nơi mọi nét vẽ đều có ký ức riêng.",
     tags: ["Fantasy", "Manga Việt", "Phiêu lưu"],
@@ -86,6 +92,7 @@ export const books: Book[] = [
     status: "Đề cử",
     color: "#b56d73",
     panel: "#312028",
+    coverImage: openLibraryCover("9781400079278"),
     description:
       "Một câu chuyện học đường pha bí ẩn, nơi những lá thư cũ mở ra bí mật của cả một lớp học.",
     tags: ["Học đường", "Bí ẩn", "Tình bạn"],
@@ -103,6 +110,7 @@ export const books: Book[] = [
     status: "Đọc tiếp",
     color: "#9a7b65",
     panel: "#2c2521",
+    coverImage: openLibraryCover("9780375704024"),
     description:
       "Tản văn đô thị về những người trẻ đi qua thành phố, giữ lại vài điều dịu dàng sau giờ tan ca.",
     tags: ["Tản văn", "Đời thường", "Đô thị"],
@@ -120,6 +128,7 @@ export const books: Book[] = [
     status: "Hot",
     color: "#5aa391",
     panel: "#1d332f",
+    coverImage: openLibraryCover("9781974700523"),
     description:
       "Quán cà phê nằm ở trạm trung chuyển không gian, nơi mỗi vị khách để lại một câu chuyện.",
     tags: ["Sci-fi", "Slice of life", "Hài nhẹ"],
@@ -137,6 +146,7 @@ export const books: Book[] = [
     status: "Bán chạy",
     color: "#8b6fb3",
     panel: "#2a2338",
+    coverImage: openLibraryCover("9780441172719"),
     description:
       "Một hành trình fantasy có tiết tấu nhanh, đi qua các vùng đất được tạo nên từ giấc mơ tập thể.",
     tags: ["Fantasy", "Phiêu lưu", "Bản đồ"],
@@ -154,6 +164,7 @@ export const books: Book[] = [
     status: "Nhẹ nhàng",
     color: "#8a8d70",
     panel: "#292b21",
+    coverImage: openLibraryCover("9780143130727"),
     description:
       "Những ghi chép nhỏ về việc sống chậm, nấu một bữa cơm và sắp xếp lại căn phòng tinh thần.",
     tags: ["Sống chậm", "Tản văn", "Gia đình"],
@@ -171,6 +182,7 @@ export const books: Book[] = [
     status: "Đặt trước",
     color: "#6e8194",
     panel: "#1d2630",
+    coverImage: openLibraryCover("9780547928227"),
     description:
       "Một thủ thư trẻ nhận nhiệm vụ bảo vệ những cuốn sách biết tự viết tiếp số phận của người đọc.",
     tags: ["Fantasy", "Thư viện", "Bí ẩn"],
@@ -188,6 +200,7 @@ export const books: Book[] = [
     status: "Ấm áp",
     color: "#d68b63",
     panel: "#35231c",
+    coverImage: openLibraryCover("9780061122415"),
     description:
       "Một tiệm sách nhỏ bên sông trở thành nơi hẹn của những người cần tìm lại điều mình từng bỏ quên.",
     tags: ["Đời thường", "Chữa lành", "Tiệm sách"],
@@ -205,6 +218,7 @@ export const books: Book[] = [
     status: "Mới ra",
     color: "#d7a1b2",
     panel: "#38252e",
+    coverImage: openLibraryCover("9781421597126"),
     description:
       "Một nhóm bạn giải mã những bông hoa giấy để lần theo bí mật của khu phố cũ.",
     tags: ["Trinh thám", "Bạn bè", "Truyện tranh"],

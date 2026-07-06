@@ -1,5 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import type { Book, Shelf, Topic } from "../_lib/library";
 import {
   books,
@@ -30,6 +35,10 @@ const h2Class = "text-[clamp(28px,3vw,38px)] font-black";
 const sectionBlock = "grid gap-6";
 const railScroll =
   "grid grid-flow-col overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
+const fallbackCoverDecor =
+  "before:absolute before:inset-x-[18px] before:top-[18px] before:h-[44%] before:rounded-[10px] before:border before:border-white/10 before:bg-[var(--cover)] before:opacity-90 before:content-['']";
+const fallbackPosterDecor =
+  "before:absolute before:inset-x-3.5 before:top-3.5 before:bottom-[38%] before:rounded-[10px] before:bg-[var(--cover)] before:opacity-90 before:content-['']";
 
 function getCoverStyle(book: Book): CoverStyle {
   return {
@@ -38,10 +47,32 @@ function getCoverStyle(book: Book): CoverStyle {
   };
 }
 
-function coverBase(compact = false) {
+function CoverArtwork({ book }: { book: Book }) {
+  if (!book.coverImage) {
+    return null;
+  }
+
+  return (
+    <>
+      <Image
+        alt=""
+        aria-hidden="true"
+        className="object-cover"
+        fill
+        loading="lazy"
+        sizes="(max-width: 768px) 70vw, 260px"
+        src={book.coverImage}
+        unoptimized
+      />
+      <span aria-hidden="true" className="absolute inset-0 bg-black/45" />
+    </>
+  );
+}
+
+function coverBase(book: Book, compact = false) {
   return [
     "relative flex flex-col justify-end overflow-hidden border border-white/15 border-l-[16px] border-l-[var(--cover)] bg-[var(--panel)] text-white shadow-[0_24px_54px_rgb(0_0_0/0.26)] transition hover:border-white/30 hover:[transform:translateY(-8px)_rotateY(-4deg)]",
-    "before:absolute before:inset-x-[18px] before:top-[18px] before:h-[44%] before:rounded-[10px] before:border before:border-white/10 before:bg-[var(--cover)] before:opacity-90 before:content-['']",
+    book.coverImage ? "" : fallbackCoverDecor,
     compact
       ? "min-h-[218px] w-[145px] rounded-xl border-l-[10px] p-[15px]"
       : "min-h-[310px] w-[210px] rounded-xl p-[22px] [transform:rotateY(-8deg)]",
@@ -50,10 +81,11 @@ function coverBase(compact = false) {
 
 export function BookCover({ book, compact = false }: { book: Book; compact?: boolean }) {
   return (
-    <Link className={coverBase(compact)} href={`/intro/${book.slug}`} style={getCoverStyle(book)}>
-      <span className="absolute left-3.5 top-3.5 z-[1] rounded-[7px] bg-black/30 px-2 py-1.5 text-xs font-extrabold">
+    <Link className={coverBase(book, compact)} href={`/intro/${book.slug}`} style={getCoverStyle(book)}>
+      <CoverArtwork book={book} />
+      <Badge className="absolute left-3.5 top-3.5 z-[1] rounded-[7px] px-2 py-1.5" variant="muted">
         {book.status}
-      </span>
+      </Badge>
       <span className="relative z-[1] mb-2.5 mt-2 block text-[13px] font-bold text-white/75">
         {book.format}
       </span>
@@ -71,9 +103,9 @@ export function BookTile({ book }: { book: Book }) {
       <TileCover book={book} />
       <div className="mt-3 flex flex-wrap gap-1.5">
         {[book.score, book.year, book.progress].map((item) => (
-          <span className="rounded-md bg-white/10 px-2 py-1 text-xs font-bold text-[#d7dbe5]" key={item}>
+          <Badge className="font-bold" key={item} variant="secondary">
             {item}
-          </span>
+          </Badge>
         ))}
       </div>
       <h3 className="mt-2.5 text-base font-bold leading-tight">{book.title}</h3>
@@ -87,14 +119,15 @@ function TileCover({ book }: { book: Book }) {
     <Link
       className={[
         "relative flex min-h-[210px] w-full flex-col justify-end overflow-hidden rounded-xl border border-white/15 border-l-[10px] border-l-[var(--cover)] bg-[var(--panel)] p-[15px] text-white transition hover:-translate-y-1 hover:border-white/30",
-        "before:absolute before:inset-x-[18px] before:top-[18px] before:h-[44%] before:rounded-[10px] before:border before:border-white/10 before:bg-[var(--cover)] before:opacity-90 before:content-['']",
+        book.coverImage ? "" : fallbackCoverDecor,
       ].join(" ")}
       href={`/intro/${book.slug}`}
       style={getCoverStyle(book)}
     >
-      <span className="absolute left-3.5 top-3.5 z-[1] rounded-[7px] bg-black/30 px-2 py-1.5 text-xs font-extrabold">
+      <CoverArtwork book={book} />
+      <Badge className="absolute left-3.5 top-3.5 z-[1] rounded-[7px] px-2 py-1.5" variant="muted">
         {book.status}
-      </span>
+      </Badge>
       <span className="relative z-[1] mb-2.5 mt-2 block text-[13px] font-bold text-white/75">
         {book.format}
       </span>
@@ -123,22 +156,25 @@ export function HeroDashboard() {
         <p className={`mt-3 text-lg ${gold}`}>{featuredBook.subtitle}</p>
         <div className="mt-[18px] flex flex-wrap gap-2">
           {[`Điểm ${featuredBook.score}`, featuredBook.year, featuredBook.pages, featuredBook.format].map((item) => (
-            <span className="rounded-[7px] border border-white/20 bg-white/10 px-2.5 py-[7px] text-[13px] font-bold text-[#f7f8fb]" key={item}>
+            <Badge className="rounded-[7px] px-2.5 py-[7px] text-[13px] font-bold" key={item} variant="outline">
               {item}
-            </span>
+            </Badge>
           ))}
         </div>
         <p className="mt-7 max-w-[760px] text-base leading-[1.75] text-[#f5f6f9]">
           {featuredBook.description}
         </p>
         <div className="mt-[34px] flex flex-wrap gap-3">
-          <Link className="inline-flex h-[54px] items-center justify-center rounded-xl bg-[#f4d675] px-6 font-black text-[#151922]" href={`/intro/${featuredBook.slug}`}>
+          <Link
+            className={cn(buttonVariants({ size: "lg" }), "h-[54px] rounded-xl px-6 font-black")}
+            href={`/intro/${featuredBook.slug}`}
+          >
             Đọc giới thiệu
           </Link>
           {["Lưu vào kệ", "Chi tiết"].map((label) => (
-            <button className="inline-flex h-[54px] items-center justify-center rounded-xl border border-white/10 bg-white/10 px-6 font-black text-white" key={label} type="button">
+            <Button className="h-[54px] rounded-xl px-6 font-black" key={label} type="button" variant="secondary">
               {label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -179,10 +215,12 @@ export function StatsStrip() {
   return (
     <section className="grid grid-cols-4 gap-4 max-md:grid-cols-1">
       {stats.map((item) => (
-        <div className={`rounded-[14px] border bg-white/5 p-[22px] ${line}`} key={item.label}>
-          <strong className="block text-3xl font-black leading-none">{item.value}</strong>
-          <span className={`mt-2 block ${muted}`}>{item.label}</span>
-        </div>
+        <Card className="rounded-[14px] bg-white/5" key={item.label}>
+          <CardContent className="p-[22px]">
+            <strong className="block text-3xl font-black leading-none">{item.value}</strong>
+            <span className={`mt-2 block ${muted}`}>{item.label}</span>
+          </CardContent>
+        </Card>
       ))}
     </section>
   );
@@ -198,8 +236,9 @@ function CompactCover({ book, inline = false }: { book: Book; inline?: boolean }
       href={`/intro/${book.slug}`}
       style={getCoverStyle(book)}
     >
-      <span className="text-[9px] font-extrabold text-white/70">{book.format}</span>
-      <strong className="mt-1 line-clamp-2 text-[10px] font-extrabold leading-[1.05]">{book.title}</strong>
+      <CoverArtwork book={book} />
+      <span className="relative z-[1] text-[9px] font-extrabold text-white/70">{book.format}</span>
+      <strong className="relative z-[1] mt-1 line-clamp-2 text-[10px] font-extrabold leading-[1.05]">{book.title}</strong>
     </Link>
   );
 }
@@ -212,16 +251,16 @@ export function CommunityDashboard() {
           <h2 className="text-lg font-black">Top bình luận</h2>
           <div className="flex gap-2">
             {["Trước", "Sau"].map((label) => (
-              <button className={`inline-flex h-9 items-center justify-center rounded-full border bg-white/5 px-3.5 text-[13px] font-extrabold text-[#f7f8fb] ${line}`} key={label} type="button">
+              <Button className="h-9 rounded-full px-3.5 text-[13px]" key={label} type="button" variant="outline">
                 {label}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
 
         <div className={`${railScroll} grid-cols-none grid-rows-none auto-cols-[minmax(280px,1fr)] gap-4 max-md:auto-cols-[minmax(280px,86vw)]`}>
           {communityHighlights.map((item, index) => (
-            <article className={`relative min-h-[210px] overflow-hidden rounded-xl border bg-[#171a23] p-5 ${line}`} key={`${item.reader}-${item.book.slug}`}>
+            <Card className="relative min-h-[210px] overflow-hidden rounded-xl bg-[#171a23] p-5" key={`${item.reader}-${item.book.slug}`}>
               <div className="absolute inset-0 scale-[1.08] bg-[var(--panel)] opacity-50 blur-[10px]" style={getCoverStyle(item.book)} />
               <div className="relative z-[1] flex items-center gap-3 pr-[74px]">
                 <span className="grid size-12 place-items-center rounded-full border-2 border-white/70 bg-[#f4d675] font-black text-[#161922]">
@@ -238,7 +277,7 @@ export function CommunityDashboard() {
                 <span>Phản hồi {index + 2}</span>
               </div>
               <CompactCover book={item.book} />
-            </article>
+            </Card>
           ))}
         </div>
       </div>
@@ -266,7 +305,7 @@ export function CommunityDashboard() {
           <h3 className="text-lg font-black">Bình luận mới</h3>
           <div className="mt-5 grid gap-2">
             {liveComments.map((item) => (
-              <article className="grid grid-cols-[42px_minmax(0,1fr)] items-center gap-3 rounded-[10px] bg-[rgb(8_10_16/0.65)] p-3" key={`${item.reader}-${item.book.slug}`}>
+              <Card className="grid grid-cols-[42px_minmax(0,1fr)] items-center gap-3 rounded-[10px] border-transparent bg-[rgb(8_10_16/0.65)] p-3" key={`${item.reader}-${item.book.slug}`}>
                 <span className="grid size-[38px] place-items-center rounded-full bg-[#f4d675] text-[13px] font-black text-[#161922]">
                   {item.reader.slice(0, 1)}
                 </span>
@@ -277,7 +316,7 @@ export function CommunityDashboard() {
                     {item.book.title}
                   </Link>
                 </div>
-              </article>
+              </Card>
             ))}
           </div>
         </section>
@@ -314,12 +353,15 @@ function PosterItem({ book }: { book: Book }) {
       <Link
         className={[
           "relative flex min-h-[326px] flex-col justify-end overflow-hidden rounded-xl border border-white/10 bg-[var(--panel)] p-[18px] text-white max-md:min-h-[270px]",
-          "before:absolute before:inset-x-3.5 before:top-3.5 before:bottom-[38%] before:rounded-[10px] before:bg-[var(--cover)] before:opacity-90 before:content-['']",
+          book.coverImage ? "" : fallbackPosterDecor,
         ].join(" ")}
         href={`/intro/${book.slug}`}
         style={getCoverStyle(book)}
       >
-        <span className="relative z-[1] w-fit rounded-md bg-white/15 px-2 py-1.5 text-xs font-black">{book.progress}</span>
+        <CoverArtwork book={book} />
+        <Badge className="relative z-[1] rounded-md bg-white/15 px-2 py-1.5 text-xs font-black text-white" variant="outline">
+          {book.progress}
+        </Badge>
         <strong className="relative z-[1] mt-3 text-[22px] font-black leading-[1.08]">{book.title}</strong>
         <small className="relative z-[1] mt-2 text-white/70">{book.author}</small>
       </Link>
@@ -338,7 +380,7 @@ export function NewReleaseRail() {
     <section className="grid scroll-mt-[100px] gap-6">
       <div className="flex items-center justify-between gap-[18px] max-md:items-start max-md:flex-col">
         <h2 className={h2Class}>Sách điện tử mới cập nhật</h2>
-        <Link className={`inline-flex h-9 items-center justify-center rounded-full border bg-white/5 px-3.5 text-[13px] font-extrabold text-[#f7f8fb] ${line}`} href="/books">
+        <Link className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-9 rounded-full px-3.5 text-[13px]")} href="/books">
           Xem toàn bộ
         </Link>
       </div>
@@ -363,15 +405,16 @@ export function TopSeriesRail() {
             <Link
               className={[
                 "relative flex min-h-[440px] flex-col justify-end overflow-hidden rounded-2xl bg-[var(--panel)] p-5 text-white rotate-[-2.5deg] max-xl:min-h-[360px] max-md:min-h-[340px]",
-                "before:absolute before:inset-x-3.5 before:top-3.5 before:bottom-[38%] before:rounded-[10px] before:bg-[var(--cover)] before:opacity-90 before:content-['']",
+                book.coverImage ? "" : fallbackPosterDecor,
                 index % 2 === 1 ? "rotate-[2deg]" : "",
               ].join(" ")}
               href={`/intro/${book.slug}`}
               style={getCoverStyle(book)}
             >
-              <span className="relative z-[1] w-fit rounded-md bg-white/15 px-2 py-1.5 text-xs font-black">
+              <CoverArtwork book={book} />
+              <Badge className="relative z-[1] rounded-md bg-white/15 px-2 py-1.5 text-xs font-black text-white" variant="outline">
                 {book.progress}
-              </span>
+              </Badge>
               <strong className="relative z-[1] mt-3 text-[30px] font-black leading-none">{book.title}</strong>
             </Link>
             <div className="mt-[18px] grid grid-cols-[58px_minmax(0,1fr)] items-start gap-3.5 max-md:grid-cols-[46px_minmax(0,1fr)]">
@@ -433,9 +476,9 @@ export function RouteHero({
       </h1>
       <p className="mt-5 max-w-[760px] text-lg leading-relaxed text-[#e6e8ef]">{description}</p>
       {action ? (
-        <span className="mt-[22px] inline-flex rounded-lg bg-[#f4d675] px-3.5 py-2.5 font-black text-[#151922]">
+        <Badge className="mt-[22px] rounded-lg px-3.5 py-2.5 font-black" variant="default">
           {action}
-        </span>
+        </Badge>
       ) : null}
     </section>
   );
@@ -483,17 +526,17 @@ export function BookIntro({ book }: { book: Book }) {
         <p className={`mt-3 text-lg ${gold}`}>{book.subtitle}</p>
         <div className="mt-[18px] flex flex-wrap gap-2">
           {[`Điểm ${book.score}`, book.year, book.pages, book.format].map((item) => (
-            <span className="rounded-[7px] border border-white/20 bg-white/10 px-2.5 py-[7px] text-[13px] font-bold text-[#f7f8fb]" key={item}>
+            <Badge className="rounded-[7px] px-2.5 py-[7px] text-[13px] font-bold" key={item} variant="outline">
               {item}
-            </span>
+            </Badge>
           ))}
         </div>
         <p className="mt-7 max-w-[760px] text-base leading-[1.75] text-[#f5f6f9]">{book.description}</p>
         <div className="mt-[18px] flex flex-wrap gap-2">
           {book.tags.map((tag) => (
-            <span className="rounded-[7px] border border-white/20 bg-white/10 px-2.5 py-[7px] text-[13px] font-bold text-[#f7f8fb]" key={tag}>
+            <Badge className="rounded-[7px] px-2.5 py-[7px] text-[13px] font-bold" key={tag} variant="outline">
               {tag}
-            </span>
+            </Badge>
           ))}
         </div>
       </div>
