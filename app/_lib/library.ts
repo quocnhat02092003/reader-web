@@ -239,19 +239,19 @@ export const shelves: Shelf[] = [
     title: "Sách Việt mới",
     caption: "Tác phẩm nổi bật từ tác giả Việt",
     href: "/books",
-    books: [books[0], books[3], books[5], books[7]],
+    books: [books[0], books[3], books[5], books[7], books[8], books[6]],
   },
   {
     title: "Truyện tranh đang lên",
     caption: "Các bộ truyện được theo dõi nhiều",
     href: "/comics",
-    books: [books[1], books[4], books[2], books[6]],
+    books: [books[1], books[4], books[9], books[2], books[6], books[5]],
   },
   {
     title: "Giới thiệu đáng đọc",
     caption: "Tóm tắt, cảm nhận và lý do nên đọc",
     href: "/introductions",
-    books: [books[7], books[0], books[2], books[5]],
+    books: [books[7], books[0], books[2], books[5], books[8], books[3]],
   },
 ];
 

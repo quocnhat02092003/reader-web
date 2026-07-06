@@ -4,20 +4,20 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-extrabold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 focus-visible:ring-[#f4d675]/35 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-extrabold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 focus-visible:ring-[var(--accent-ring)] active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: "bg-[#f4d675] text-[#151922] hover:bg-[#ffe38a]",
+        default: "bg-[var(--accent)] text-[var(--accent-contrast)] hover:brightness-105",
         outline:
-          "border-white/10 bg-white/5 text-[#f7f8fb] hover:bg-white/10 hover:text-[#f4d675] aria-expanded:bg-white/10",
+          "border-[var(--line)] bg-[var(--surface-soft)] text-[var(--text)] hover:bg-[var(--chip-bg)] hover:text-[var(--accent)] aria-expanded:bg-[var(--chip-bg)]",
         secondary:
-          "bg-white/10 text-white hover:bg-white/15 aria-expanded:bg-white/15",
+          "bg-[var(--chip-bg)] text-[var(--text)] hover:brightness-105 aria-expanded:bg-[var(--chip-bg)]",
         ghost:
-          "text-[#f5f7fb] hover:bg-white/10 hover:text-[#f4d675] aria-expanded:bg-white/10",
+          "text-[var(--text)] hover:bg-[var(--chip-bg)] hover:text-[var(--accent)] aria-expanded:bg-[var(--chip-bg)]",
         destructive:
           "bg-red-500/10 text-red-200 hover:bg-red-500/20 focus-visible:ring-red-400/25",
-        link: "text-[#f4d675] underline-offset-4 hover:underline",
+        link: "text-[var(--accent)] underline-offset-4 hover:underline",
       },
       size: {
         default:

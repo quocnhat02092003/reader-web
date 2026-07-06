@@ -28,15 +28,15 @@ type CoverStyle = CSSProperties & {
   "--genre"?: string;
 };
 
-const line = "border-white/10";
-const muted = "text-[#a6adbd]";
-const gold = "text-[#f4d675]";
+const line = "border-[var(--line)]";
+const muted = "text-[var(--text-muted)]";
+const gold = "text-[var(--accent)]";
 const h2Class = "text-[clamp(28px,3vw,38px)] font-black";
 const sectionBlock = "grid gap-6";
 const railScroll =
   "grid grid-flow-col overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 const fallbackCoverDecor =
-  "before:absolute before:inset-x-[18px] before:top-[18px] before:h-[44%] before:rounded-[10px] before:border before:border-white/10 before:bg-[var(--cover)] before:opacity-90 before:content-['']";
+  "before:absolute before:inset-x-[18px] before:top-[18px] before:h-[44%] before:rounded-[10px] before:border before:border-[var(--line)] before:bg-[var(--cover)] before:opacity-90 before:content-['']";
 const fallbackPosterDecor =
   "before:absolute before:inset-x-3.5 before:top-3.5 before:bottom-[38%] before:rounded-[10px] before:bg-[var(--cover)] before:opacity-90 before:content-['']";
 
@@ -64,14 +64,14 @@ function CoverArtwork({ book }: { book: Book }) {
         src={book.coverImage}
         unoptimized
       />
-      <span aria-hidden="true" className="absolute inset-0 bg-black/45" />
+      <span aria-hidden="true" className="absolute inset-0 bg-[var(--cover-overlay)]" />
     </>
   );
 }
 
 function coverBase(book: Book, compact = false) {
   return [
-    "relative flex flex-col justify-end overflow-hidden border border-white/15 border-l-[16px] border-l-[var(--cover)] bg-[var(--panel)] text-white shadow-[0_24px_54px_rgb(0_0_0/0.26)] transition hover:border-white/30 hover:[transform:translateY(-8px)_rotateY(-4deg)]",
+    "relative flex flex-col justify-end overflow-hidden border border-[var(--line-strong)] border-l-[16px] border-l-[var(--cover)] bg-[var(--panel)] text-white shadow-[0_24px_54px_rgb(0_0_0/0.26)] transition hover:border-[var(--accent)] hover:[transform:translateY(-8px)_rotateY(-4deg)]",
     book.coverImage ? "" : fallbackCoverDecor,
     compact
       ? "min-h-[218px] w-[145px] rounded-xl border-l-[10px] p-[15px]"
@@ -97,10 +97,10 @@ export function BookCover({ book, compact = false }: { book: Book; compact?: boo
   );
 }
 
-export function BookTile({ book }: { book: Book }) {
+export function BookTile({ book, featured = false }: { book: Book; featured?: boolean }) {
   return (
     <article className="min-w-0">
-      <TileCover book={book} />
+      <TileCover book={book} featured={featured} />
       <div className="mt-3 flex flex-wrap gap-1.5">
         {[book.score, book.year, book.progress].map((item) => (
           <Badge className="font-bold" key={item} variant="secondary">
@@ -114,11 +114,12 @@ export function BookTile({ book }: { book: Book }) {
   );
 }
 
-function TileCover({ book }: { book: Book }) {
+function TileCover({ book, featured = false }: { book: Book; featured?: boolean }) {
   return (
     <Link
       className={[
-        "relative flex min-h-[210px] w-full flex-col justify-end overflow-hidden rounded-xl border border-white/15 border-l-[10px] border-l-[var(--cover)] bg-[var(--panel)] p-[15px] text-white transition hover:-translate-y-1 hover:border-white/30",
+        "relative flex w-full flex-col justify-end overflow-hidden rounded-xl border border-[var(--line-strong)] border-l-[10px] border-l-[var(--cover)] bg-[var(--panel)] text-white transition hover:-translate-y-1 hover:border-[var(--accent)]",
+        featured ? "min-h-[270px] p-[18px]" : "min-h-[210px] p-[15px]",
         book.coverImage ? "" : fallbackCoverDecor,
       ].join(" ")}
       href={`/intro/${book.slug}`}
@@ -143,7 +144,7 @@ export function HeroDashboard() {
   return (
     <section
       className={[
-        "grid min-h-[520px] items-end gap-12 overflow-hidden rounded-2xl border bg-[rgb(12_15_23/0.72)] px-7 pb-[42px] pt-[58px]",
+        "grid min-h-[520px] items-end gap-12 overflow-hidden rounded-2xl border bg-[var(--card-bg)] px-7 pb-[42px] pt-[58px]",
         line,
         "lg:grid-cols-[minmax(0,0.82fr)_minmax(420px,1fr)] max-lg:grid-cols-1 max-md:min-h-0 max-md:gap-8 max-md:px-[18px] max-md:pb-7 max-md:pt-[34px]",
       ].join(" ")}
@@ -161,7 +162,7 @@ export function HeroDashboard() {
             </Badge>
           ))}
         </div>
-        <p className="mt-7 max-w-[760px] text-base leading-[1.75] text-[#f5f6f9]">
+        <p className="mt-7 max-w-[760px] text-base leading-[1.75] text-[var(--text)]">
           {featuredBook.description}
         </p>
         <div className="mt-[34px] flex flex-wrap gap-3">
@@ -215,7 +216,7 @@ export function StatsStrip() {
   return (
     <section className="grid grid-cols-4 gap-4 max-md:grid-cols-1">
       {stats.map((item) => (
-        <Card className="rounded-[14px] bg-white/5" key={item.label}>
+        <Card className="rounded-[14px] bg-[var(--surface-soft)]" key={item.label}>
           <CardContent className="p-[22px]">
             <strong className="block text-3xl font-black leading-none">{item.value}</strong>
             <span className={`mt-2 block ${muted}`}>{item.label}</span>
@@ -230,7 +231,7 @@ function CompactCover({ book, inline = false }: { book: Book; inline?: boolean }
   return (
     <Link
       className={[
-        "flex flex-col justify-end overflow-hidden border border-white/20 border-l-[5px] border-l-[var(--cover)] bg-[var(--panel)] p-1.5 text-white",
+        "flex flex-col justify-end overflow-hidden border border-[var(--line-strong)] border-l-[5px] border-l-[var(--cover)] bg-[var(--panel)] p-1.5 text-white",
         inline ? "relative h-[42px] w-[30px] rounded-[5px] border-l-[3px] p-1 [&_span]:hidden [&_strong]:hidden" : "absolute right-[18px] top-[18px] h-[76px] w-[54px] rounded-[7px]",
       ].join(" ")}
       href={`/intro/${book.slug}`}
@@ -245,7 +246,7 @@ function CompactCover({ book, inline = false }: { book: Book; inline?: boolean }
 
 export function CommunityDashboard() {
   return (
-    <section className={`scroll-mt-[100px] overflow-hidden rounded-[18px] border bg-white/[0.035] ${line}`}>
+    <section className={`scroll-mt-[100px] overflow-hidden rounded-[18px] border bg-[var(--card-bg)] ${line}`}>
       <div className="grid gap-[22px] px-8 pb-8 pt-7 max-md:px-3.5 max-md:pb-[22px] max-md:pt-5">
         <div className="flex items-center justify-between gap-[18px] max-md:items-start max-md:flex-col">
           <h2 className="text-lg font-black">Top bình luận</h2>
@@ -260,10 +261,10 @@ export function CommunityDashboard() {
 
         <div className={`${railScroll} grid-cols-none grid-rows-none auto-cols-[minmax(280px,1fr)] gap-4 max-md:auto-cols-[minmax(280px,86vw)]`}>
           {communityHighlights.map((item, index) => (
-            <Card className="relative min-h-[210px] overflow-hidden rounded-xl bg-[#171a23] p-5" key={`${item.reader}-${item.book.slug}`}>
+            <Card className="relative min-h-[210px] overflow-hidden rounded-xl bg-[var(--card-strong)] p-5" key={`${item.reader}-${item.book.slug}`}>
               <div className="absolute inset-0 scale-[1.08] bg-[var(--panel)] opacity-50 blur-[10px]" style={getCoverStyle(item.book)} />
               <div className="relative z-[1] flex items-center gap-3 pr-[74px]">
-                <span className="grid size-12 place-items-center rounded-full border-2 border-white/70 bg-[#f4d675] font-black text-[#161922]">
+                <span className="grid size-12 place-items-center rounded-full border-2 border-[var(--line-strong)] bg-[var(--accent)] font-black text-[var(--accent-contrast)]">
                   {item.reader.slice(0, 1)}
                 </span>
                 <div>
@@ -271,8 +272,8 @@ export function CommunityDashboard() {
                   <small className={`mt-0.5 block text-xs ${gold}`}>{item.badge}</small>
                 </div>
               </div>
-              <p className="relative z-[1] mt-4 text-sm leading-relaxed text-[#d1d5df]">{item.comment}</p>
-              <div className="relative z-[1] mt-[22px] flex gap-3.5 text-xs font-extrabold text-[#aeb4c2]">
+              <p className="relative z-[1] mt-4 text-sm leading-relaxed text-[var(--text-soft)]">{item.comment}</p>
+              <div className="relative z-[1] mt-[22px] flex gap-3.5 text-xs font-extrabold text-[var(--text-muted)]">
                 <span>Thích {128 - index * 13}</span>
                 <span>Phản hồi {index + 2}</span>
               </div>
@@ -282,22 +283,22 @@ export function CommunityDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-[1.05fr_1.05fr_0.8fr_1.65fr] border-t border-white/10 max-xl:grid-cols-2 max-md:grid-cols-1">
+      <div className="grid grid-cols-[1.05fr_1.05fr_0.8fr_1.65fr] border-t border-[var(--line)] max-xl:grid-cols-2 max-md:grid-cols-1">
         <RankingColumn href="/books" items={popularTitles} title="Sôi nổi nhất" />
         <RankingColumn href="/introductions" items={favoriteTitles} title="Yêu thích nhất" />
-        <section className={`min-h-[290px] border-r border-white/10 px-8 py-7 max-xl:border-b max-xl:border-r-0 max-md:min-h-0 max-md:px-[18px] max-md:py-[22px]`}>
+        <section className={`min-h-[290px] border-r border-[var(--line)] px-8 py-7 max-xl:border-b max-xl:border-r-0 max-md:min-h-0 max-md:px-[18px] max-md:py-[22px]`}>
           <h3 className="text-lg font-black">Thể loại hot</h3>
           <ol className="mt-6 grid gap-3.5">
             {hotGenres.map((genre, index) => (
               <li className="grid grid-cols-[34px_minmax(0,1fr)] items-center gap-3" key={genre.label}>
-                <span className="font-black text-white/30">{index + 1}</span>
+                <span className="font-black text-[var(--rank-muted)]">{index + 1}</span>
                 <Link className="w-fit rounded-full bg-[var(--genre)] px-3.5 py-2 text-[13px] font-extrabold text-white" href="/genres" style={{ "--genre": genre.color } as CoverStyle}>
                   {genre.label}
                 </Link>
               </li>
             ))}
           </ol>
-          <Link className="mt-[22px] inline-flex text-[13px] font-extrabold text-[#858c9c]" href="/genres">
+          <Link className="mt-[22px] inline-flex text-[13px] font-extrabold text-[var(--text-muted)]" href="/genres">
             Xem thêm
           </Link>
         </section>
@@ -305,13 +306,13 @@ export function CommunityDashboard() {
           <h3 className="text-lg font-black">Bình luận mới</h3>
           <div className="mt-5 grid gap-2">
             {liveComments.map((item) => (
-              <Card className="grid grid-cols-[42px_minmax(0,1fr)] items-center gap-3 rounded-[10px] border-transparent bg-[rgb(8_10_16/0.65)] p-3" key={`${item.reader}-${item.book.slug}`}>
-                <span className="grid size-[38px] place-items-center rounded-full bg-[#f4d675] text-[13px] font-black text-[#161922]">
+              <Card className="grid grid-cols-[42px_minmax(0,1fr)] items-center gap-3 rounded-[10px] border-transparent bg-[var(--surface-soft)] p-3" key={`${item.reader}-${item.book.slug}`}>
+                <span className="grid size-[38px] place-items-center rounded-full bg-[var(--accent)] text-[13px] font-black text-[var(--accent-contrast)]">
                   {item.reader.slice(0, 1)}
                 </span>
                 <div className="min-w-0">
                   <strong className="block text-[13px]">{item.reader}</strong>
-                  <p className="mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap text-[13px] text-[#c4c9d4]">{item.text}</p>
+                  <p className="mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap text-[13px] text-[var(--text-soft)]">{item.text}</p>
                   <Link className={`mt-1 inline-flex text-xs font-extrabold ${gold}`} href={`/intro/${item.book.slug}`}>
                     {item.book.title}
                   </Link>
@@ -327,12 +328,12 @@ export function CommunityDashboard() {
 
 function RankingColumn({ href, items, title }: { href: string; items: Book[]; title: string }) {
   return (
-    <section className="min-h-[290px] border-r border-white/10 px-8 py-7 max-xl:border-b max-md:min-h-0 max-md:border-r-0 max-md:px-[18px] max-md:py-[22px]">
+    <section className="min-h-[290px] border-r border-[var(--line)] px-8 py-7 max-xl:border-b max-md:min-h-0 max-md:border-r-0 max-md:px-[18px] max-md:py-[22px]">
       <h3 className="text-lg font-black">{title}</h3>
       <ol className="mt-6 grid gap-3.5">
         {items.map((book, index) => (
           <li className="grid min-w-0 grid-cols-[34px_30px_minmax(0,1fr)] items-center gap-3" key={book.slug}>
-            <span className="font-black text-white/30">{index + 1}</span>
+            <span className="font-black text-[var(--rank-muted)]">{index + 1}</span>
             <CompactCover book={book} inline />
             <Link className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-extrabold" href={`/intro/${book.slug}`}>
               {book.title}
@@ -340,7 +341,7 @@ function RankingColumn({ href, items, title }: { href: string; items: Book[]; ti
           </li>
         ))}
       </ol>
-      <Link className="mt-[22px] inline-flex text-[13px] font-extrabold text-[#858c9c]" href={href}>
+      <Link className="mt-[22px] inline-flex text-[13px] font-extrabold text-[var(--text-muted)]" href={href}>
         Xem thêm
       </Link>
     </section>
@@ -352,7 +353,7 @@ function PosterItem({ book }: { book: Book }) {
     <article>
       <Link
         className={[
-          "relative flex min-h-[326px] flex-col justify-end overflow-hidden rounded-xl border border-white/10 bg-[var(--panel)] p-[18px] text-white max-md:min-h-[270px]",
+          "relative flex min-h-[326px] flex-col justify-end overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--panel)] p-[18px] text-white max-md:min-h-[270px]",
           book.coverImage ? "" : fallbackPosterDecor,
         ].join(" ")}
         href={`/intro/${book.slug}`}
@@ -418,7 +419,7 @@ export function TopSeriesRail() {
               <strong className="relative z-[1] mt-3 text-[30px] font-black leading-none">{book.title}</strong>
             </Link>
             <div className="mt-[18px] grid grid-cols-[58px_minmax(0,1fr)] items-start gap-3.5 max-md:grid-cols-[46px_minmax(0,1fr)]">
-              <span className="text-[58px] font-black italic leading-[0.9] text-[#f4d675] max-md:text-[46px]">
+              <span className="text-[58px] font-black italic leading-[0.9] text-[var(--accent)] max-md:text-[46px]">
                 {index + 1}
               </span>
               <div>
@@ -438,7 +439,7 @@ export function TopSeriesRail() {
 
 export function ShelfPanel({ items = shelves }: { items?: Shelf[] }) {
   return (
-    <section className="grid gap-9 rounded-[18px] bg-[#232735] p-8 max-md:p-[18px]">
+    <section className="grid gap-9 rounded-[18px] bg-[var(--surface-muted)] p-8 max-md:p-[18px]">
       {items.map((shelf) => (
         <div className="grid grid-cols-[200px_minmax(0,1fr)] items-start gap-7 max-md:grid-cols-1" key={shelf.title}>
           <div>
@@ -448,9 +449,9 @@ export function ShelfPanel({ items = shelves }: { items?: Shelf[] }) {
               Xem toàn bộ
             </Link>
           </div>
-          <div className="grid grid-cols-4 gap-[18px] max-xl:grid-cols-3 max-md:grid-cols-1">
+          <div className="grid grid-cols-6 gap-[18px] max-2xl:grid-cols-5 max-xl:grid-cols-3 max-md:grid-cols-1">
             {shelf.books.map((book) => (
-              <BookTile book={book} key={book.slug} />
+              <BookTile book={book} featured key={book.slug} />
             ))}
           </div>
         </div>
@@ -469,12 +470,12 @@ export function RouteHero({
   action?: string;
 }) {
   return (
-    <section className={`rounded-[18px] border bg-white/5 p-[clamp(28px,5vw,64px)] ${line}`}>
+    <section className={`rounded-[18px] border bg-[var(--surface-soft)] p-[clamp(28px,5vw,64px)] ${line}`}>
       <p className={`text-sm font-bold ${gold}`}>KệSách route</p>
       <h1 className="mt-[18px] max-w-[720px] text-[clamp(42px,6vw,82px)] font-black leading-[0.96] max-md:text-[clamp(38px,13vw,64px)]">
         {title}
       </h1>
-      <p className="mt-5 max-w-[760px] text-lg leading-relaxed text-[#e6e8ef]">{description}</p>
+      <p className="mt-5 max-w-[760px] text-lg leading-relaxed text-[var(--text-soft)]">{description}</p>
       {action ? (
         <Badge className="mt-[22px] rounded-lg px-3.5 py-2.5 font-black" variant="default">
           {action}
@@ -498,13 +499,13 @@ export function IntroductionList({ items = books }: { items?: Book[] }) {
   return (
     <section className="grid gap-4">
       {items.map((book) => (
-        <article className={`grid grid-cols-[150px_minmax(0,1fr)] items-center gap-6 rounded-2xl border bg-white/5 p-[18px] max-md:grid-cols-1 ${line}`} key={book.slug}>
+        <article className={`grid grid-cols-[150px_minmax(0,1fr)] items-center gap-6 rounded-2xl border bg-[var(--surface-soft)] p-[18px] max-md:grid-cols-1 ${line}`} key={book.slug}>
           <BookCover book={book} compact />
           <div>
             <p className={`font-extrabold ${gold}`}>{book.format}</p>
             <h2 className="mt-2 text-[28px] font-bold">{book.title}</h2>
             <span className={`mt-1 block ${muted}`}>{book.subtitle}</span>
-            <p className="mt-3.5 max-w-[780px] leading-relaxed text-[#e5e7ee]">{book.description}</p>
+            <p className="mt-3.5 max-w-[780px] leading-relaxed text-[var(--text-soft)]">{book.description}</p>
             <Link className={`mt-[18px] inline-flex font-extrabold ${gold}`} href={`/intro/${book.slug}`}>
               Đọc bài giới thiệu
             </Link>
@@ -517,7 +518,7 @@ export function IntroductionList({ items = books }: { items?: Book[] }) {
 
 export function BookIntro({ book }: { book: Book }) {
   return (
-    <article className={`grid grid-cols-[minmax(0,1fr)_260px] items-end gap-[52px] rounded-[18px] border bg-white/5 p-[clamp(28px,5vw,64px)] max-md:grid-cols-1 ${line}`}>
+    <article className={`grid grid-cols-[minmax(0,1fr)_260px] items-end gap-[52px] rounded-[18px] border bg-[var(--surface-soft)] p-[clamp(28px,5vw,64px)] max-md:grid-cols-1 ${line}`}>
       <div>
         <p className={`text-sm font-bold ${gold}`}>{book.status}</p>
         <h1 className="mt-[18px] max-w-[720px] text-[clamp(42px,6vw,82px)] font-black leading-[0.96] max-md:text-[clamp(38px,13vw,64px)]">
@@ -531,7 +532,7 @@ export function BookIntro({ book }: { book: Book }) {
             </Badge>
           ))}
         </div>
-        <p className="mt-7 max-w-[760px] text-base leading-[1.75] text-[#f5f6f9]">{book.description}</p>
+        <p className="mt-7 max-w-[760px] text-base leading-[1.75] text-[var(--text)]">{book.description}</p>
         <div className="mt-[18px] flex flex-wrap gap-2">
           {book.tags.map((tag) => (
             <Badge className="rounded-[7px] px-2.5 py-[7px] text-[13px] font-bold" key={tag} variant="outline">
