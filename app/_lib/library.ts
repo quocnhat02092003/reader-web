@@ -175,6 +175,40 @@ export const books: Book[] = [
       "Một thủ thư trẻ nhận nhiệm vụ bảo vệ những cuốn sách biết tự viết tiếp số phận của người đọc.",
     tags: ["Fantasy", "Thư viện", "Bí ẩn"],
   },
+  {
+    slug: "tiem-sach-ben-song",
+    title: "Tiệm Sách Bên Sông",
+    subtitle: "Riverside Bookshop",
+    author: "Mai Chi",
+    format: "Sách",
+    year: "2025",
+    score: "8.6",
+    progress: "Hoàn thành",
+    pages: "276 trang",
+    status: "Ấm áp",
+    color: "#d68b63",
+    panel: "#35231c",
+    description:
+      "Một tiệm sách nhỏ bên sông trở thành nơi hẹn của những người cần tìm lại điều mình từng bỏ quên.",
+    tags: ["Đời thường", "Chữa lành", "Tiệm sách"],
+  },
+  {
+    slug: "mat-ma-hoa-giay",
+    title: "Mật Mã Hoa Giấy",
+    subtitle: "Paper Flower Code",
+    author: "Nhật Minh",
+    format: "Truyện tranh",
+    year: "2026",
+    score: "8.3",
+    progress: "Tập 9",
+    pages: "148 trang",
+    status: "Mới ra",
+    color: "#d7a1b2",
+    panel: "#38252e",
+    description:
+      "Một nhóm bạn giải mã những bông hoa giấy để lần theo bí mật của khu phố cũ.",
+    tags: ["Trinh thám", "Bạn bè", "Truyện tranh"],
+  },
 ];
 
 export const topics: Topic[] = [
@@ -212,6 +246,105 @@ export const stats = [
   { label: "Truyện tranh", value: "8.8K" },
   { label: "Bài giới thiệu", value: "1.2K" },
   { label: "Độc giả tuần", value: "64K" },
+];
+
+export const communityHighlights = [
+  {
+    reader: "Hong Anh",
+    badge: "Thành viên lâu năm",
+    book: books[0],
+    comment:
+      "Bản giới thiệu viết gọn, đọc xong muốn mở sách ngay. Đoạn về cách nhân vật tự chữa lành rất đúng tâm trạng.",
+  },
+  {
+    reader: "Minh Khuê",
+    badge: "Reviewer",
+    book: books[1],
+    comment:
+      "Thành phố trong truyện có không khí riêng, mỗi chương giống như một khung tranh có nhịp rất cuốn.",
+  },
+  {
+    reader: "Gia Huy",
+    badge: "Đọc 42h",
+    book: books[7],
+    comment:
+      "Ý tưởng thư viện mùa đông rất hợp để làm series dài. Phần giới thiệu đủ kích thích mà không spoil.",
+  },
+  {
+    reader: "Bảo Ngọc",
+    badge: "Manga fan",
+    book: books[4],
+    comment:
+      "Orbit Cafe nhẹ nhàng mà vẫn lạ. Mình thích cách mỗi khách hàng mở ra một câu chuyện khác nhau.",
+  },
+  {
+    reader: "An Nhiên",
+    badge: "Top bình luận",
+    book: books[2],
+    comment:
+      "Bí ẩn học đường nhưng không quá nặng. Nhân vật phụ có nhiều đất diễn nên đọc rất đã.",
+  },
+];
+
+export const popularTitles = [books[0], books[1], books[2], books[4], books[7]];
+
+export const favoriteTitles = [books[4], books[0], books[5], books[3], books[7]];
+
+export const hotGenres = [
+  { label: "Chữa lành", color: "#b23e77" },
+  { label: "Phiêu lưu", color: "#347dd9" },
+  { label: "Light novel", color: "#8257c8" },
+  { label: "Đời thường", color: "#9db64f" },
+  { label: "Tình cảm", color: "#b59066" },
+];
+
+export const liveComments = [
+  {
+    reader: "Yến Nhi",
+    book: books[7],
+    text: "Đọc đoạn mở đầu thấy lạnh đúng nghĩa mùa đông.",
+  },
+  {
+    reader: "Ca Dao",
+    book: books[1],
+    text: "Nét dựng thế giới ổn, mong có thêm bản in màu.",
+  },
+  {
+    reader: "Hạnh",
+    book: books[0],
+    text: "Bài giới thiệu không spoil, rất dễ chọn sách.",
+  },
+  {
+    reader: "Huy Nguyễn",
+    book: books[5],
+    text: "Fantasy dễ đọc, nhịp nhanh hơn mình tưởng.",
+  },
+];
+
+export const newReleaseBooks = [
+  books[7],
+  books[1],
+  books[4],
+  books[2],
+  books[5],
+  books[0],
+  books[9],
+  books[8],
+  books[6],
+  books[3],
+];
+
+export const topSeriesBooks = [
+  books[1],
+  books[4],
+  books[2],
+  books[5],
+  books[7],
+  books[0],
+  books[8],
+  books[9],
+  books[3],
+  books[6],
 ];
 
 export function getBook(slug: string) {

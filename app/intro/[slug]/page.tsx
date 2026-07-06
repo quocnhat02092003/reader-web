@@ -16,11 +16,11 @@ export default async function IntroDetailPage({
 
   return (
     <ReaderShell>
-      <main className="page-flow">
+      <main className="mx-auto grid w-full max-w-[1900px] gap-[46px] px-6 pb-[72px] pt-[54px] max-md:gap-8 max-md:px-4 max-md:pb-14 max-md:pt-7">
         <BookIntro book={book} />
-        <section className="section-block">
-          <div className="section-heading">
-            <h2>Có thể bạn muốn đọc tiếp</h2>
+        <section className="grid gap-6">
+          <div>
+            <h2 className="text-[clamp(28px,3vw,38px)] font-black">Có thể bạn muốn đọc tiếp</h2>
           </div>
           <BookGrid items={books.filter((item) => item.slug !== book.slug).slice(0, 4)} />
         </section>

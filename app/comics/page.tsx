@@ -5,7 +5,7 @@ import { books } from "../_lib/library";
 export default function ComicsPage() {
   return (
     <ReaderShell>
-      <main className="page-flow">
+      <main className="mx-auto grid w-full max-w-[1900px] gap-[46px] px-6 pb-[72px] pt-[54px] max-md:gap-8 max-md:px-4 max-md:pb-14 max-md:pt-7">
         <RouteHero
           title="Truyện tranh đang đọc"
           description="Không gian riêng cho manga, webtoon và truyện tranh Việt có tiến độ cập nhật rõ ràng."
