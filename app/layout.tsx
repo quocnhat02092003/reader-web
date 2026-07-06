@@ -4,12 +4,12 @@ import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
 });
 
 export const metadata: Metadata = {
-  title: "KệĐọc | Đọc sách và truyện",
-  description: "Giao diện đọc sách, truyện và nội dung số.",
+  title: "KệSách | Đọc sách và truyện",
+  description: "Dashboard đọc sách, truyện và giới thiệu sách.",
 };
 
 export default function RootLayout({
@@ -18,10 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="vi"
-      className={`${inter.variable} h-full antialiased`}
-    >
+    <html lang="vi" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
