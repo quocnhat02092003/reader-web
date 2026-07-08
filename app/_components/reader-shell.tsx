@@ -154,6 +154,7 @@ export function ReaderShell({ children }: { children: React.ReactNode }) {
             const isActive =
               (item.href === "/dashboard" && pathname === "/") ||
               (item.href === "/introductions" && pathname.startsWith("/intro/")) ||
+              (item.href === "/introductions" && pathname.startsWith("/read/")) ||
               pathname === item.href ||
               (item.href !== "/dashboard" && pathname.startsWith(item.href));
 
@@ -226,6 +227,20 @@ export function ReaderShell({ children }: { children: React.ReactNode }) {
                     >
                       Đăng xuất
                     </Button>
+                    <div className="mt-2 grid grid-cols-2 gap-2">
+                      <Link
+                        className="inline-flex h-[38px] items-center justify-center rounded-lg bg-[var(--chip-bg)] text-sm font-extrabold text-[var(--text)] transition hover:text-[var(--accent)]"
+                        href="/admin"
+                      >
+                        Admin
+                      </Link>
+                      <Link
+                        className="inline-flex h-[38px] items-center justify-center rounded-lg bg-[var(--chip-bg)] text-sm font-extrabold text-[var(--text)] transition hover:text-[var(--accent)]"
+                        href="/logout"
+                      >
+                        Logout
+                      </Link>
+                    </div>
                   </>
                 ) : (
                   <form className="grid gap-3" onSubmit={handleLogin}>
@@ -245,6 +260,20 @@ export function ReaderShell({ children }: { children: React.ReactNode }) {
                     <Button className="h-[42px] cursor-pointer rounded-lg" type="submit">
                       Đăng nhập
                     </Button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        className="inline-flex h-[38px] items-center justify-center rounded-lg bg-[var(--chip-bg)] text-sm font-extrabold text-[var(--text)] transition hover:text-[var(--accent)]"
+                        href="/login"
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        className="inline-flex h-[38px] items-center justify-center rounded-lg bg-[var(--chip-bg)] text-sm font-extrabold text-[var(--text)] transition hover:text-[var(--accent)]"
+                        href="/register"
+                      >
+                        Register
+                      </Link>
+                    </div>
                   </form>
                 )}
               </CardContent>

@@ -29,6 +29,29 @@ export type Shelf = {
   books: Book[];
 };
 
+export type BookChapter = {
+  id: string;
+  number: number;
+  title: string;
+  label: string;
+  readTime: string;
+  updatedAt: string;
+  progress: string;
+  isNew: boolean;
+  isLocked: boolean;
+  summary: string;
+};
+
+export type BookComment = {
+  id: string;
+  reader: string;
+  badge: string;
+  postedAt: string;
+  text: string;
+  likes: number;
+  replies: number;
+};
+
 const openLibraryCover = (isbn: string) =>
   `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false`;
 
@@ -363,4 +386,72 @@ export const topSeriesBooks = [
 
 export function getBook(slug: string) {
   return books.find((book) => book.slug === slug) ?? featuredBook;
+}
+
+const chapterTitles = [
+  "Mở đầu trong căn phòng yên tĩnh",
+  "Lời nhắn ở mép trang",
+  "Cuộc gặp sau giờ đóng cửa",
+  "Bản đồ và chiếc chìa khóa cũ",
+  "Đêm dài nhất của nhân vật chính",
+  "Khoảnh khắc mọi thứ đổi hướng",
+  "Bức thư chưa từng được gửi",
+  "Một lời hứa để đọc tiếp",
+];
+
+export function getBookChapters(book: Book): BookChapter[] {
+  const unit = book.format === "Truyện tranh" ? "Tập" : "Chương";
+
+  return chapterTitles.map((title, index) => {
+    const number = index + 1;
+    const isLatest = index >= chapterTitles.length - 2;
+
+    return {
+      id: `${book.slug}-${number}`,
+      number,
+      title,
+      label: `${unit} ${number}`,
+      readTime: book.format === "Truyện tranh" ? `${8 + index} phút xem` : `${12 + index * 2} phút đọc`,
+      updatedAt: isLatest ? "Mới cập nhật" : `${index + 2} ngày trước`,
+      progress: index === 0 ? "Đọc thử miễn phí" : index < 5 ? "Sẵn sàng đọc" : "Dành cho thành viên",
+      isNew: isLatest,
+      isLocked: index > 5,
+      summary:
+        index === 0
+          ? `Mở ra nhịp kể chính của ${book.title}, đủ để người đọc nắm không khí và nhân vật trung tâm.`
+          : `Tiếp tục tuyến truyện với nhịp ${book.format === "Truyện tranh" ? "khung hình" : "chương"} rõ hơn, thêm một nút thắt mới.`,
+    };
+  });
+}
+
+export function getBookComments(book: Book): BookComment[] {
+  return [
+    {
+      id: `${book.slug}-comment-1`,
+      reader: "Minh Anh",
+      badge: "Đã đọc 62%",
+      postedAt: "12 phút trước",
+      text: "Phần giới thiệu đủ rõ để chọn đọc ngay, nhất là đoạn mô tả nhịp truyện và không khí.",
+      likes: 34,
+      replies: 4,
+    },
+    {
+      id: `${book.slug}-comment-2`,
+      reader: "Quang Huy",
+      badge: "Theo dõi tác giả",
+      postedAt: "1 giờ trước",
+      text: `Mình thích cách ${book.title} được tóm tắt không spoil. Danh sách chương cũng dễ chọn điểm bắt đầu.`,
+      likes: 21,
+      replies: 2,
+    },
+    {
+      id: `${book.slug}-comment-3`,
+      reader: "Hạ Vy",
+      badge: "Reviewer",
+      postedAt: "Hôm qua",
+      text: "Nên thêm đánh dấu chương đã đọc và nhắc chương mới, hai tính năng đó rất cần khi theo dõi truyện dài.",
+      likes: 18,
+      replies: 1,
+    },
+  ];
 }
